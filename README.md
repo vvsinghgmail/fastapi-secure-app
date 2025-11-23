@@ -59,36 +59,7 @@ If you plan to run locally or run tests outside container:
 # Project Structure
 ## 1. Folder structure
 
-fastapi-secure-app
-├── alembic
-│   └── env.py
-├── alembic.ini
-├── app
-│   ├── api
-│   │   ├── deps.py
-│   │   └── v1
-│   │       ├── auth.py
-│   │       └── blogs.py
-│   ├── core
-│   │   ├── config.py
-│   │   └── security.py
-│   ├── db
-│   │   └── session.py
-│   ├── main.py
-│   ├── models
-│   │   ├── blog.py
-│   │   ├── token.py
-│   │   └── user.py
-│   └── schemas
-│       ├── auth.py
-│       ├── blog.py
-│       └── user.py
-├── docker-compose.uat.yml
-├── README.md
-├── requirements.txt
-├── scripts
-│   └── seed_uat.py
-└── tests
-    └── test_auth.py
+<img width="894" height="693" alt="image" src="https://github.com/user-attachments/assets/993fa1e3-4392-4b00-a939-a1bb1d21014b" />
+
 
 
