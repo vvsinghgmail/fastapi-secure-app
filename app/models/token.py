@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 
-from sqlmodel import SQLModel, Field, Column, Integer, ForeignKey, Boolean, String
+from sqlmodel import SQLModel, Field, Column, Integer, ForeignKey
 
 
 class RefreshToken(SQLModel, table=True):
@@ -15,4 +15,3 @@ class RefreshToken(SQLModel, table=True):
     revoked: bool = Field(default=False)
     user_agent: Optional[str] = Field(default=None)
     ip_address: Optional[str] = Field(default=None)
-
