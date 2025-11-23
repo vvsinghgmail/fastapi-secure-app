@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 
-from app.api.deps import get_db, get_current_user, require_admin
+from app.api.deps import get_db, get_current_user
 from app.models.blog import Blog
 from app.models.user import User
 from app.schemas.blog import BlogCreate, BlogUpdate, BlogRead
@@ -30,18 +30,12 @@ def create_blog(
 
 
 @router.get("/", response_model=List[BlogRead])
-def list_blogs(
-    db: Session = Depends(get_db),
-) -> List[BlogRead]:
-    blogs = db.exec(select(Blog)).all()
-    return blogs
+def list_blogs(db: Session = Depends(get_db)) -> List[BlogRead]:
+    return db.exec(select(Blog)).all()
 
 
 @router.get("/{blog_id}", response_model=BlogRead)
-def get_blog(
-    blog_id: int,
-    db: Session = Depends(get_db),
-) -> BlogRead:
+def get_blog(blog_id: int, db: Session = Depends(get_db)) -> BlogRead:
     blog = db.exec(select(Blog).where(Blog.id == blog_id)).first()
     if not blog:
         raise HTTPException(status_code=404, detail="Blog not found")
@@ -58,14 +52,12 @@ def update_blog(
     blog = db.exec(select(Blog).where(Blog.id == blog_id)).first()
     if not blog:
         raise HTTPException(status_code=404, detail="Blog not found")
-    if blog.owner_id != current_user.id and current_user.role.name != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not allowed to edit this blog",
-        )
 
-    update_data = blog_in.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
+    if blog.owner_id != current_user.id and current_user.role.value != "admin":
+        raise HTTPException(status_code=403, detail="Not allowed to edit this blog")
+
+    data = blog_in.model_dump(exclude_unset=True)
+    for field, value in data.items():
         setattr(blog, field, value)
 
     db.add(blog)
@@ -83,12 +75,10 @@ def delete_blog(
     blog = db.exec(select(Blog).where(Blog.id == blog_id)).first()
     if not blog:
         raise HTTPException(status_code=404, detail="Blog not found")
-    if blog.owner_id != current_user.id and current_user.role.name != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not allowed to delete this blog",
-        )
+
+    if blog.owner_id != current_user.id and current_user.role.value != "admin":
+        raise HTTPException(status_code=403, detail="Not allowed to delete this blog")
+
     db.delete(blog)
     db.commit()
     return None
-
