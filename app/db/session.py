@@ -6,8 +6,7 @@ engine = create_engine(settings.DATABASE_URL, echo=False)
 
 
 def init_db() -> None:
-    # For dev/UAT, you can create all tables here.
-    # In production, rely on Alembic migrations.
+    # Import models so they’re registered
     from app.models import user, blog, token  # noqa: F401
 
     SQLModel.metadata.create_all(bind=engine)
@@ -16,4 +15,5 @@ def init_db() -> None:
 def get_session():
     with Session(engine) as session:
         yield session
+
 
