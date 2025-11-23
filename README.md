@@ -32,21 +32,23 @@ this stack balances developer ergonomics, performance, and security. Docker give
 
 ****1.1 Update OS & install base tools:****
 
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y build-essential git curl wget unzip
+$ sudo apt update && sudo apt upgrade -y
+$ sudo apt install -y build-essential git curl wget unzip
 
 ****1.2 Install Docker & Docker Compose****
 
 #### install Docker
 
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker $USER
+$ curl -fsSL https://get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh
+$ sudo usermod -aG docker $USER
 
 #### logout/login or `newgrp docker` to apply
 
 ##### install docker-compose plugin (modern)
-sudo apt install -y docker-compose
+
+$ sudo apt install -y docker-compose
+
 ###### or use Docker Compose v2 plugin: sudo apt-get install docker-compose-plugin
 
 NOTE: containers isolate services (DB, redis, app) and make tear-down/recreate trivial. Docker Compose simplifies multi-service orchestration.
@@ -57,13 +59,50 @@ If you plan to run locally or run tests outside container:
 
 
 ****1.4 Install alembic****
-sudo apt install alembic
+
+$ sudo apt install alembic
 
 
 # Project Structure
 ## 1. Folder structure
 
-<img width="894" height="693" alt="image" src="https://github.com/user-attachments/assets/993fa1e3-4392-4b00-a939-a1bb1d21014b" />
+<img width="763" height="842" alt="image" src="https://github.com/user-attachments/assets/2b01d0e0-6421-428b-926f-e517ea02889f" />
 
+
+## Step 1 – Make sure you’re in the project root
+
+You should be here:
+
+$ cd ~/projects/fastapi-secure-app
+$ ls
+# you should see: app/  alembic/  alembic.ini  docker-compose.uat.yml  ...
+
+Step 2 – Use a virtual environment (recommended)
+
+If you’re not already using one:
+
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install --upgrade pip
+$ pip install -r requirements.txt
+
+###Recommended SECRET_KEY (256-bit, URL-safe) in  .env file
+You have to change the below line in in  .env file
+
+Recommended SECRET_KEY (256-bit, URL-safe)
+
+Now generate your own (Linux command)
+
+Run this inside your shell:
+
+$ openssl rand -hex 32
+
+
+
+Now alembic inside this venv will know about your local packages.
+
+If /usr/bin/alembic still points to system one, you can explicitly run:
+
+python -m alembic revision --autogenerate -m "init"
 
 
