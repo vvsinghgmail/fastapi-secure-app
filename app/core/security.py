@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta, timezone
-from typing import Optional, Union, Any
-from passlib.context import CryptContext
-from jose import jwt, JWTError
+from typing import Any, Union, Optional, List
 from uuid import uuid4
 
-from app.core.config import get_settings
+from passlib.context import CryptContext
+from jose import jwt, JWTError
 
+from app.core.config import get_settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,7 +18,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(subject: Union[str, Any], roles: list[str]) -> str:
+def create_access_token(subject: Union[str, Any], roles: List[str]) -> str:
     settings = get_settings()
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
@@ -30,10 +30,7 @@ def create_access_token(subject: Union[str, Any], roles: list[str]) -> str:
         "type": "access",
         "jti": str(uuid4()),
     }
-    encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
-    )
-    return encoded_jwt
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def create_refresh_token(subject: Union[str, Any]) -> str:
@@ -47,19 +44,12 @@ def create_refresh_token(subject: Union[str, Any]) -> str:
         "type": "refresh",
         "jti": str(uuid4()),
     }
-    encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
-    )
-    return encoded_jwt
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def decode_token(token: str) -> Optional[dict]:
     settings = get_settings()
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        return payload
+        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:
         return None
-
