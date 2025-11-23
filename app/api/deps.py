@@ -27,8 +27,7 @@ def get_current_user(
         )
 
     user_id = int(payload.get("sub"))
-    statement = select(User).where(User.id == user_id)
-    user = db.exec(statement).first()
+    user = db.exec(select(User).where(User.id == user_id)).first()
     if not user or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found/active"
@@ -42,4 +41,3 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin role required"
         )
     return current_user
-
