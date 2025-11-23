@@ -28,4 +28,3 @@ class UserRead(UserBase):
 class UserUpdate(BaseModel):
     is_active: Optional[bool] = None
     role: Optional[UserRole] = None
-
