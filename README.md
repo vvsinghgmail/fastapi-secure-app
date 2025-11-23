@@ -17,12 +17,12 @@ this stack balances developer ergonomics, performance, and security. Docker give
 **Procedure**
 ***Prepare the UAT machine (Ubuntu example)***
 
-****1.1 Update OS & install base tools:
+****1.1 Update OS & install base tools:****
 
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y build-essential git curl wget unzip
 
-****1.2 Install Docker & Docker Compose
+****1.2 Install Docker & Docker Compose****
 
 #### install Docker
 
@@ -38,7 +38,7 @@ sudo apt install -y docker-compose
 
 NOTE: containers isolate services (DB, redis, app) and make tear-down/recreate trivial. Docker Compose simplifies multi-service orchestration.
 
-****1.3 Install Python (optional if running in Docker)
+****1.3 Install Python (optional if running in Docker)****
 
 If you plan to run locally or run tests outside container:
 
