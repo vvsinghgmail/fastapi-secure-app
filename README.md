@@ -16,3 +16,20 @@ this stack balances developer ergonomics, performance, and security. Docker give
 
 **Procedure**
 ***Prepare the UAT machine (Ubuntu example)***
+
+1.1 Update OS & install base tools:
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y build-essential git curl wget unzip
+
+1.2 Install Docker & Docker Compose
+
+#### install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+# logout/login or `newgrp docker` to apply
+
+##### install docker-compose plugin (modern)
+sudo apt install -y docker-compose
+###### or use Docker Compose v2 plugin: sudo apt-get install docker-compose-plugin
