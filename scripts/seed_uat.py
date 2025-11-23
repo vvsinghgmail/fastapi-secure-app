@@ -8,7 +8,6 @@ from app.core.security import get_password_hash
 
 def main():
     with Session(engine) as session:
-        # Admin
         admin_email = "admin@uat.local"
         user_email = "user@uat.local"
 
@@ -38,7 +37,6 @@ def main():
 
         session.commit()
 
-        # Sample blogs
         admin = session.exec(
             select(User).where(User.email == admin_email)
         ).first()
@@ -47,22 +45,23 @@ def main():
         ).first()
 
         if admin:
-            blog1 = Blog(
-                title="Admin Blog",
-                content="Admin-written blog content",
-                is_published=True,
-                owner_id=admin.id,
+            session.add(
+                Blog(
+                    title="Admin Blog",
+                    content="Admin-written blog content",
+                    is_published=True,
+                    owner_id=admin.id,
+                )
             )
-            session.add(blog1)
-
         if user:
-            blog2 = Blog(
-                title="User Blog",
-                content="User-written blog content",
-                is_published=False,
-                owner_id=user.id,
+            session.add(
+                Blog(
+                    title="User Blog",
+                    content="User-written blog content",
+                    is_published=False,
+                    owner_id=user.id,
+                )
             )
-            session.add(blog2)
 
         session.commit()
         print("Seeded blogs")
@@ -70,4 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
