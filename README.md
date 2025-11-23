@@ -56,6 +56,10 @@ NOTE: containers isolate services (DB, redis, app) and make tear-down/recreate t
 If you plan to run locally or run tests outside container:
 
 
+****1.4 Install alembic****
+sudo apt install alembic
+
+
 # Project Structure
 ## 1. Folder structure
 
