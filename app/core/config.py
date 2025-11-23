@@ -11,11 +11,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ENVIRONMENT: str = "local"
 
-    # For UAT, we rely on env vars injected by Docker (.env.uat)
+    # In UAT/Prod, values come from real env vars (Docker .env.uat)
     model_config = SettingsConfigDict(env_file=None, extra="ignore")
 
 
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-
