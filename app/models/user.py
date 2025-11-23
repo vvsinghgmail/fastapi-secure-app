@@ -19,4 +19,3 @@ class User(SQLModel, table=True):
     role: UserRole = Field(default=UserRole.user)
 
     blogs: List["Blog"] = Relationship(back_populates="owner")
-
