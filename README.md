@@ -69,7 +69,63 @@ $ sudo apt install alembic
 <img width="763" height="842" alt="image" src="https://github.com/user-attachments/assets/2b01d0e0-6421-428b-926f-e517ea02889f" />
 
 
-## Step 1 – Make sure you’re in the project root
+## Clone the repository from Github
+
+GitHub no longer accepts account passwords for git push. You have to use either:
+
+a Personal Access Token (PAT) over HTTPS, or
+
+SSH keys
+
+### Create a Personal Access Token (PAT) on GitHub
+
+#### On your browser:
+
+- Go to GitHub and log in as vvsinghgmail.
+- Top-right avatar → Settings.
+- Left sidebar → Developer settings → Personal access tokens
+- Either “Tokens (classic)” or “Fine-grained tokens”.
+- Click Generate new token.
+- Give it a name like fastapi-uat-token.
+- Expiry: choose something sensible (e.g., 30/90 days).
+
+#### Scopes:
+
+For classic: check at least repo.
+
+Click Generate token.
+
+=> Copy the token somewhere secure (you won’t see it again).
+
+#### Set proper remote & push with token
+
+Set up the remote once, then push:
+
+cd ~/projects/fastapi-secure-app
+
+# set origin (if not already)
+git remote remove origin 2>/dev/null || true
+git remote add origin https://github.com/vvsinghgmail/fastapi-secure-app.git
+
+# check your branch name
+git branch:
+if main
+
+  git push -u origin main
+
+  else if master then
+
+  git push -u origin master
+
+When it prompts:
+
+Username → vvsinghgmail
+
+Password → paste the token you created (NOT your GitHub password)
+---
+
+
+## Step 1.0 – Make sure you’re in the project root
 
 You should be here:
 
@@ -77,7 +133,7 @@ $ cd ~/projects/fastapi-secure-app
 $ ls
 # you should see: app/  alembic/  alembic.ini  docker-compose.uat.yml  ...
 
-Step 2 – Use a virtual environment (recommended)
+Step 2.0 – Use a virtual environment (recommended)
 
 If you’re not already using one:
 
