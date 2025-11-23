@@ -1,6 +1,19 @@
 # fastapi-secure-app
 full FastAPI + SQLModel project scaffold
 
+Below is a full FastAPI + SQLModel project scaffold with:
+
+1. Secure user registration & login
+2. Access + Refresh tokens (rotation + revocation)
+3. Role-based auth (Admin/User)
+4. Blog CRUD
+5. DB-level validations
+6. Token-based session management via refresh tokens
+7. OAuth2 Bearer protection
+8. UAT setup: Docker Compose, .env.uat, seed script, and workflow
+
+I’ll assume you’ll put this in a folder called: fastapi-secure-app and then push it to your own GitHub.
+
 
 **Pre-req decisions & rationale (short)**
 
@@ -41,4 +54,41 @@ NOTE: containers isolate services (DB, redis, app) and make tear-down/recreate t
 ****1.3 Install Python (optional if running in Docker)****
 
 If you plan to run locally or run tests outside container:
+
+
+# Project Structure
+## 1. Folder structure
+
+fastapi-secure-app
+├── alembic
+│   └── env.py
+├── alembic.ini
+├── app
+│   ├── api
+│   │   ├── deps.py
+│   │   └── v1
+│   │       ├── auth.py
+│   │       └── blogs.py
+│   ├── core
+│   │   ├── config.py
+│   │   └── security.py
+│   ├── db
+│   │   └── session.py
+│   ├── main.py
+│   ├── models
+│   │   ├── blog.py
+│   │   ├── token.py
+│   │   └── user.py
+│   └── schemas
+│       ├── auth.py
+│       ├── blog.py
+│       └── user.py
+├── docker-compose.uat.yml
+├── README.md
+├── requirements.txt
+├── scripts
+│   └── seed_uat.py
+└── tests
+    └── test_auth.py
+
 
