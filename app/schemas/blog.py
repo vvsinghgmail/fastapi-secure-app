@@ -27,4 +27,3 @@ class BlogRead(BlogBase):
 
     class Config:
         from_attributes = True
-
