@@ -161,4 +161,10 @@ If /usr/bin/alembic still points to system one, you can explicitly run:
 
 python -m alembic revision --autogenerate -m "init"
 
-
+---
+(.venv) vishal@ubuntu-uat:~/projects/fastapi-secure-app$ curl http://localhost:8000/health
+{"status":"ok"}(.venv) vishal@ubuntu-uat:~/projects/fastacurl -X POST "http://localhost:8000/api/v1/auth/login" \1/auth/login" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=admin@uat.local&password=AdminPass123!"
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiYWRtaW4iXSwiZXhwIjoxNzYzODkxMzc5LCJ0eXBlIjoiYWNjZXNzIiwianRpIjoiOTYxNTZiZGEtMWM5NS00ODY4LTg3YTYtYjMzMWU1YmQzOWY4In0.iVOy86Zy59hLNySw7fYHfhnTYXZn2jDaiHiPM1dx8Tk","refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzY2NDgyNDc5LCJ0eXBlIjoicmVmcmVzaCIsImp0aSI6IjhkNTI3ODk2LTQ3NjktNDU5Ny04ZjMxLTQxYzY3YTU4ZjhjNSJ9.gjIsNNyvz42JFeRSyZ3Znm5fDXv4hp8pFKz0ubrhjiw","token_type":"bearer"}
+---
