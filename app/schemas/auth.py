@@ -14,4 +14,3 @@ class TokenPayload(BaseModel):
     type: str
     jti: str
     roles: Optional[List[str]] = None
-
