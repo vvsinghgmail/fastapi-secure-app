@@ -16,4 +16,3 @@ class Blog(SQLModel, table=True):
 
     owner_id: int = Field(sa_column=Column(Integer, ForeignKey("users.id")))
     owner: "User" = Relationship(back_populates="blogs")
-
