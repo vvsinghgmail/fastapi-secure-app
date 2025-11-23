@@ -13,3 +13,6 @@ full FastAPI + SQLModel project scaffold
 
 **Rationale** 
 this stack balances developer ergonomics, performance, and security. Docker gives reproducible infrastructure; PostgreSQL + SQLAlchemy/SQLModel provides reliable constraints and migrations.
+
+**Procedure**
+***Prepare the UAT machine (Ubuntu example)***
