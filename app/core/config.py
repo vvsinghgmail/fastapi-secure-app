@@ -1,5 +1,4 @@
 from functools import lru_cache
-from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,7 +11,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ENVIRONMENT: str = "local"
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    # For UAT, we rely on env vars injected by Docker (.env.uat)
+    model_config = SettingsConfigDict(env_file=None, extra="ignore")
 
 
 @lru_cache
