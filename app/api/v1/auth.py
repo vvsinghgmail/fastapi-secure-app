@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
@@ -17,7 +14,6 @@ from app.models.user import User, UserRole
 from app.models.token import RefreshToken
 from app.schemas.user import UserCreate, UserRead
 from app.schemas.auth import TokenPair
-
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -57,11 +53,11 @@ def login(
     access_token = create_access_token(subject=user.id, roles=[user.role])
     refresh_token = create_refresh_token(subject=user.id)
 
-    # Store refresh token in DB (for rotation & revocation)
+    payload = decode_token(refresh_token)
     rt = RefreshToken(
         token=refresh_token,
         user_id=user.id,
-        jti=decode_token(refresh_token)["jti"],
+        jti=payload["jti"],
         user_agent=request.headers.get("user-agent") if request else None,
         ip_address=request.client.host if request and request.client else None,
     )
@@ -83,38 +79,34 @@ def refresh_token(
             detail="Invalid refresh token",
         )
 
-    jti = payload.get("jti")
-    user_id = int(payload.get("sub"))
-
-    # Find token record
     rt_db = db.exec(
         select(RefreshToken).where(
-            RefreshToken.token == refresh_token, RefreshToken.revoked == False  # noqa
+            RefreshToken.token == refresh_token,
+            RefreshToken.revoked == False,  # noqa: E712
         )
     ).first()
-
     if not rt_db:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh token revoked or not found",
         )
 
-    # Rotate: revoke old, issue new
     rt_db.revoked = True
     db.add(rt_db)
 
+    user_id = int(payload["sub"])
     user = db.exec(select(User).where(User.id == user_id)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
     new_access = create_access_token(subject=user.id, roles=[user.role])
     new_refresh = create_refresh_token(subject=user.id)
-    new_jti = decode_token(new_refresh)["jti"]
+    new_payload = decode_token(new_refresh)
 
     rt_new = RefreshToken(
         token=new_refresh,
         user_id=user.id,
-        jti=new_jti,
+        jti=new_payload["jti"],
         user_agent=request.headers.get("user-agent") if request else None,
         ip_address=request.client.host if request and request.client else None,
     )
@@ -134,12 +126,11 @@ def logout(
         select(RefreshToken).where(
             RefreshToken.token == refresh_token,
             RefreshToken.user_id == current_user.id,
-            RefreshToken.revoked == False,  # noqa
+            RefreshToken.revoked == False,  # noqa: E712
         )
     ).first()
     if not rt_db:
         raise HTTPException(status_code=404, detail="Refresh token not found")
-
     rt_db.revoked = True
     db.add(rt_db)
     db.commit()
@@ -154,7 +145,7 @@ def logout_all(
     tokens = db.exec(
         select(RefreshToken).where(
             RefreshToken.user_id == current_user.id,
-            RefreshToken.revoked == False,  # noqa
+            RefreshToken.revoked == False,  # noqa: E712
         )
     ).all()
     for t in tokens:
@@ -162,4 +153,3 @@ def logout_all(
         db.add(t)
     db.commit()
     return {"detail": "Logged out from all sessions"}
-
