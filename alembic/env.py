@@ -3,23 +3,21 @@ from pathlib import Path
 
 from sqlalchemy import engine_from_config, pool
 from alembic import context
-
-from app.core.config import get_settings
 from sqlmodel import SQLModel
-from app.models import user, blog, token  # noqa
 
-# Ensure project root is on sys.path
+# Ensure project root is on sys.path BEFORE importing app.*
 BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
+from app.core.config import get_settings  # noqa: E402
+from app.models import user, blog, token  # noqa: F401, E402
+
 config = context.config
 settings = get_settings()
 
-# Override sqlalchemy.url from our settings
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
-# We skip logging config to avoid KeyError('formatters')
 target_metadata = SQLModel.metadata
 
 
@@ -42,10 +40,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
