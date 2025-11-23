@@ -53,6 +53,7 @@ def main():
                     owner_id=admin.id,
                 )
             )
+
         if user:
             session.add(
                 Blog(
